@@ -1,0 +1,128 @@
+body {
+    width: 130px;
+    height: 300px;
+    padding: 2rem;
+    padding-top: 0px;
+    overflow: hidden;
+    background-color:rgb(31, 31, 48);
+}
+
+p {
+    color: rgb(192, 192, 192);
+    cursor: default;
+}
+
+h3 {
+    color: rgb(216, 216, 216);
+    cursor: default;
+}
+
+h2 {
+    grid-area: "header";
+    color:goldenrod;
+    font-family: 'Courier New', Courier, monospace;
+    font-style: italic;
+    cursor: default;
+}
+
+.grid{
+    column-gap: 5%;
+    row-gap: 5%;
+    height: 100%;
+}
+
+.btn {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    cursor: pointer;
+}
+
+.btn:disabled {
+    cursor: default;
+}
+
+/*main page*/
+.main_grid {    
+    display: grid;
+    grid-template-areas:
+        "header"
+        "global"
+        "channel"
+        "video"
+        "storage"
+        "help";
+}
+
+.global {
+    grid-area: global;
+}
+
+.channel {
+    grid-area: channel;
+}
+
+.video {
+    grid-area: video;
+}
+
+.help {
+    grid-area: help;
+}
+
+.storage {
+    grid-area: storage;
+}
+
+
+/*storage page*/
+.storage_grid {
+    display: none;
+    grid-template-rows: 5% 5% 65% 10%;
+    grid-template-areas: 
+    "header header"
+    "switch switch"
+    "storage storage"
+    "back back";
+}
+
+.switch_view {
+    grid-area: switch;
+    cursor: pointer;
+    font-style: oblique;
+    text-decoration: underline;
+    user-select: none;
+}
+
+.storage_sub_grid {
+    grid-area: storage;
+    grid-template-columns: 80% 10%;
+    grid-template-areas: 
+    "name button";
+}
+
+.videos {
+    display: none;
+    background-color: violet;
+}
+
+.channels {
+    display: grid;
+    background-color: teal;
+}
+
+/*help page*/
+.help_grid {
+    display: none;
+    grid-template-rows: 10% 70% 10%;
+    grid-template-areas: 
+    "header"
+    "text"
+    "back";
+}
+
+.text {
+    overflow-y: scroll;
+}
+
+.back {
+    grid-area: back;
+}

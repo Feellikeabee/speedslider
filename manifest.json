@@ -1,0 +1,39 @@
+{
+
+  "description": "Adds a slider to the youtube control bar that allows for easy speed adjustment.",
+  "manifest_version": 2,
+  "name": "SpeedSlider",
+  "version": "1.0",
+  "icons": {
+    "48": "icons/image-48.png"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "blahblah@blah"
+    }
+  },
+
+  "browser_action": {
+    "default_icon": "icons/image-32.png",
+    "theme_icons": [{
+        "light": "icons/image-32.png",
+        "dark": "icons/image-32.png",
+        "size": 32
+    }],
+    "default_title": "SpeedSlider",
+    "default_popup": "settings.html"
+  },
+
+  "permissions": [
+    "tabs"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["speedslider.js"]
+    }
+  ]
+
+}
