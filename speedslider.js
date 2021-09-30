@@ -25,21 +25,65 @@ function inject() {
         check_labl.remove();
     }
 
-    var css = document.createElement("link");
-    css.href = "speedslider.css";
-    css.type = "text/css";
-    css.rel = "stylesheet";
+    
+    var ytpcon = document.getElementsByClassName("ytp-chrome-controls")[0];
 
     var style = document.createElement("style");
     document.head.appendChild(style);
-    
-    var ytpcon = document.getElementsByClassName("ytp-chrome-controls")[0];
-    
-    var slider = document.createElement('div');
-    slider.innerHTML = '<input type="range" min="1" max="40" value="10" class="slider" id="speedSlider" title=""></input>';
-    /*
+
+    var grid = document.createElement("div");
+
+    grid.classList.add("injected_grid"); 
+
+    var label = document.createElement('label');
+    label.id = "valueLabel";
+    label.innerHTML = "1.0"
+
+    var button = document.createElement('button');
+    button.type = "button";
+    button.id = "resetButton";
+    button.title = "reset";
+    button.innerHTML = "R";
+
+    var slider = document.createElement('input');
+    slider.type = "range";
+    slider.min = "1";
+    slider.max = "40";
+    slider.value = "10";
+    slider.classList.add("slider");
+    slider.id = "speedSlider";
+    slider.title = "1";
+
+    grid.appendChild(button);
+    grid.appendChild(slider);
+    grid.appendChild(label);
+    ytpcon.insertBefore(grid, document.getElementsByClassName("ytp-right-controls")[0]);
+
+    style.sheet.insertRule(
+        `.injected_grid {
+            display: grid;
+
+            align-items: center;
+            grid-template-rows: auto;
+            grid-template-columns: auto auto auto;
+            grid-template-areas: "resetbtn slider label";
+
+        }`);
+
+    style.sheet.insertRule(
+        `#resetButton {
+            grid-area: resetbtn;
+        }`);
+
+    style.sheet.insertRule(
+        `#valueLabel {
+            grid-area: label
+        }`);
+
     style.sheet.insertRule(
         `#speedSlider {
+            grid-area: slider
+
             vertical-align: middle; 
             -moz-appearance: none;
             appearance: none;
@@ -54,13 +98,6 @@ function inject() {
             transition: background 0.1s ease-in;
             transition: background 1s ease-out;
         }`);
-
-    style.sheet.insertRule(
-        `#speedSlider:hover #speedSlider::-moz-range-progress {
-            background: goldenrod;                    
-            transition: background 1s ease-in;
-            transition: background 0.1s ease-out;
-        }`);
             
     style.sheet.insertRule(
         `#speedSlider::-moz-range-thumb {
@@ -71,28 +108,23 @@ function inject() {
             height; 5px;
             width: height;
             transition: background .1s ease-in-out;
-        }`);   
+        }`);
+        
+     style.sheet.insertRule(
+        `#speedSlider::-moz-range-progress {
+            background: goldenrod;
+            height: 100%;                    
+            transition: background 1s ease-in;
+            transition: background 0.1s ease-out;
+        }`);
 
- 
 
-    style.sheet.insertRule(
-        `#speedSlider::-moz-range-progress:hover {
-            background-color: #43e5f7;
-        }`); 
-
-    */
-    
-    var label = document.createElement('div');
-    label.innerHTML = '<label id="valueLabel"/>';
-    
-    var button = document.createElement('div');
-    button.innerHTML = ' <button type="button" id="resetButton" title="reset">R</button>';
     //style.sheet.insertRule('#resetButton {margin-top: 10px;}');
-    
+    /*
     ytpcon.insertBefore(button, document.getElementsByClassName("ytp-right-controls")[0]);
     ytpcon.insertBefore(slider, document.getElementsByClassName("ytp-right-controls")[0]);
     ytpcon.insertBefore(label, document.getElementsByClassName("ytp-right-controls")[0]);
-    document.getElementById("speedSlider").title = document.getElementById("speedSlider").value/10;    
+    */
 
 }
 
