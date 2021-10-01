@@ -1,28 +1,11 @@
-function update_speed() {
-    var speed = document.getElementById("speedSlider").value/10;
-    var videoPlayer = document.getElementsByClassName("video-stream html5-main-video")[0];
-    videoPlayer.playbackRate = speed;
-    document.getElementById("speedSlider").title = speed.toFixed(1);    
-    document.getElementById("valueLabel").innerHTML = speed.toFixed(1);    
-}
-
-function reset() {
-    var video = document.getElementsByClassName("video-stream html5-main-video")[0];
-    video.playbackRate = 1;
-    document.getElementById("speedSlider").value = 10;
-    document.getElementById("speedSlider").title = 1.0.toFixed(1);
-    document.getElementById("valueLabel").innerHTML = 1.0.toFixed(1);    
-}
-
 function inject() {
+    console.log("injecting controls");
 
-    var check_slid = document.getElementById('speedSlider');
-    var check_butn = document.getElementById('resetButton');
-    var check_labl = document.getElementById('valueLabel');
-    if (check_slid != null && check_butn != null && check_labl != null){
-        check_slid.remove();
-        check_butn.remove();
-        check_labl.remove();
+    var check_injected = document.getElementById('injected_grid');
+    if (check_injected != null){
+        console.log("removing existing injection");
+        check_injected.innerHTML = "";
+        check_injected.remove();
     }
 
     
@@ -32,7 +15,7 @@ function inject() {
     document.head.appendChild(style);
 
     var grid = document.createElement("div");
-
+    grid.id = "injected_grid";
     grid.classList.add("injected_grid"); 
 
     var label = document.createElement('label');
@@ -129,9 +112,27 @@ function inject() {
 }
 
 function add_listeners(){
+    console.log("adding listeners");
     document.getElementById("speedSlider").addEventListener("input", update_speed);
     document.getElementById("resetButton").addEventListener("click", reset);
 }
+
+function update_speed() {
+    var speed = document.getElementById("speedSlider").value/10;
+    var videoPlayer = document.getElementsByClassName("video-stream html5-main-video")[0];
+    videoPlayer.playbackRate = speed;
+    document.getElementById("speedSlider").title = speed.toFixed(1);    
+    document.getElementById("valueLabel").innerHTML = speed.toFixed(1);    
+}
+
+function reset() {
+    var video = document.getElementsByClassName("video-stream html5-main-video")[0];
+    video.playbackRate = 1;
+    document.getElementById("speedSlider").value = 10;
+    document.getElementById("speedSlider").title = 1.0.toFixed(1);
+    document.getElementById("valueLabel").innerHTML = 1.0.toFixed(1);    
+}
+
 
 /*
 function save_speed(){
@@ -144,46 +145,102 @@ function save_speed(){
 }
 */
 
+function save_speed(key) {
+
+
+}
+
 function load_speed(){
+    console.log("loading speeds");
 
-    var speed = 1;
-    var video = document.URL.split("/")[3];
-    var channle = document.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string')[0].textContent;
+    function onGot(item) {
 
-    function setSpeed(result) {
-        speed = result.speed | speed;
+        var video = document.URL.split("/")[3];
+        var channle = document.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string')[0].textContent;
+        var speed;
+
+        if (item.hasOwnProperty(video)) {
+            speed = item[video].speed;
+
+        } else if (item.hasOwnProperty(channle)) {
+            speed = item[channle].speed;
+
+        } else if (item.hasOwnProperty("default")) {
+            console.log("duh");
+            speed = item["default"].speed;
+
+        } else {
+            speed = 1;
+        }
+
+        document.getElementById("speedSlider").value = speed*10;
+        document.getElementsByClassName("video-stream html5-main-video")[0].playbackRate = speed;
+        document.getElementById("speedSlider").title = speed.toFixed(1);    
+        document.getElementById("valueLabel").innerHTML = speed.toFixed(1); 
     }
     
     function onError(error) {
         console.log(`Error: ${error}`);
     }
 
-    let get_global_speed = browser.storage.local.get(global);
-    get_global_speed.then(setSpeed, onError);
-    
-    let get_channel_speed = browser.storage.local.get(channle);
-    get_channel_speed.then(setSpeed, onError);
-
-    let get_video_speed = browser.storage.local.get(video);
-    get_video_speed.then(setSpeed, onError);
-
-    document.getElementById("speedSlider").value = speed*10;
-    document.getElementsByClassName("video-stream html5-main-video")[0].playbackRate = speed;
-    document.getElementById("speedSlider").title = speed.toFixed(1);    
-    document.getElementById("valueLabel").innerHTML = speed.toFixed(1); 
-
+    let getspeeds = browser.storage.local.get();
+    getspeeds.then(onGot, onError);
 }
 
+function load_settings() {
+    function onGot(item) {
+        if (item.hasOwnProperty("settings")) {
+
+            console.log("ok wat")
+
+        }
+    }
+    
+    function onError(error) {
+        console.log(`Error: ${error}`);
+    }
+
+    let aaaa = browser.storage.local.get();
+    aaaa.then(onGot, onError);
+}
+/* Message test */
+
+(function() {
+    if (window.hasRun) {
+        return;
+    }
+    window.hasRun = true;
+
+    browser.runtime.onMessage.addListener(notify);
+    function notify(message){
+        alert(message.record);
+    }
+})();
+
+/* Initilize the script */
+
 function init() {
+    console.log("starting up");
+    //load_settings();
     inject();
     add_listeners();
     load_speed();
 }
 
 
+function onCleared() {
+    console.log("clearing storage");
+    console.log("OK");
+
+}
+  
+function onError(e) {
+    console.log(e);
+}
+  
+var clearStorage = browser.storage.local.clear();
+clearStorage.then(onCleared, onError);
+
+    
 init();
-
-
-
-
 
